@@ -1,0 +1,640 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-navy: #0a0f1e;
+  --color-brand-green: #1d9e75;
+  --color-brand-green-light: #5dcaa5;
+  --color-brand-green-dark: #0f6e56;
+  --color-brand-green-bg: #e1f5ee;
+  --color-brand-dark-gray: #1c1f2e;
+  --color-brand-gray: #6b7280;
+  --color-brand-border: #e0e4ec;
+  --color-brand-border-dark: #16382e;
+}
+
+:root {
+  --background: #0a0f1e;
+  --foreground: #ffffff;
+}
+
+@layer base {
+  html,
+  body {
+    background-color: var(--color-brand-navy);
+    color: #ffffff;
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+    letter-spacing: -0.011em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.03em;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Apple-like liquid glass surface — subtle, muted gradients */
+@utility glass {
+  position: relative;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(29, 158, 117, 0.04) 100%
+    );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(22px) saturate(150%);
+  border-radius: 20px;
+  overflow: hidden;
+  transition:
+    transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 400ms ease,
+    background 400ms ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0) 45%
+    );
+    opacity: 0.35;
+    mix-blend-mode: screen;
+  }
+}
+
+@utility glass-hover {
+  &:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in oklab, var(--color-brand-green) 35%, transparent);
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.03) 50%,
+      rgba(29, 158, 117, 0.08) 100%
+    );
+  }
+}
+
+@utility text-gradient-brand {
+  background: linear-gradient(
+    100deg,
+    #ffffff 0%,
+    var(--color-brand-green-light) 55%,
+    var(--color-brand-green) 100%
+  );
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility btn-liquid {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    var(--color-brand-green) 0%,
+    #17845f 55%,
+    var(--color-brand-green-dark) 100%
+  );
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition:
+    transform 400ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 400ms ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.18) 0%,
+      rgba(255, 255, 255, 0) 55%
+    );
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    filter: saturate(120%) brightness(1.06);
+  }
+
+  &:focus-visible {
+    outline: none;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+      0 0 0 2px var(--color-brand-navy),
+      0 0 0 4px var(--color-brand-green-light);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.985);
+  }
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    transform: none;
+    filter: saturate(70%) brightness(0.9);
+    opacity: 0.75;
+    cursor: not-allowed;
+  }
+}
+
+/* Consistent focus ring for secondary/link CTAs */
+@utility focus-brand {
+  &:focus-visible {
+    outline: none;
+    border-radius: 8px;
+    box-shadow:
+      0 0 0 2px var(--color-brand-navy),
+      0 0 0 4px var(--color-brand-green-light);
+  }
+}
+
+
+@utility glass-glow {
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Range slider — green fill up to handle, darker after */
+@utility brand-slider {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  padding: 11px 0;
+  background-color: transparent;
+  background-image: linear-gradient(
+    to right,
+    var(--color-brand-green) 0%,
+    var(--color-brand-green) var(--val, 0%),
+    #1a2338 var(--val, 0%),
+    #1a2338 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 6px;
+  background-position: center;
+  background-clip: content-box;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  touch-action: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 2px solid var(--color-brand-green);
+    cursor: pointer;
+    margin-top: 0;
+  }
+  &::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 2px solid var(--color-brand-green);
+    cursor: pointer;
+  }
+  &::-moz-range-track {
+    background: transparent;
+    height: 6px;
+  }
+}
+
+/* Hide fullscreen and overflow (three-dots) buttons on native video controls */
+.video-no-extras::-webkit-media-controls-fullscreen-button,
+.video-no-extras::-webkit-media-controls-overflow-button {
+  display: none !important;
+}
+
+.video-no-extras::-webkit-media-controls-enclosure {
+  overflow: hidden !important;
+}
+
+/* ---------- Modern ambient layer ---------- */
+
+/* Soft aurora blobs behind the page — flat brand hues, very low opacity */
+@utility aurora {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 60vw;
+    height: 60vw;
+    border-radius: 999px;
+    filter: blur(120px);
+    opacity: 0.16;
+  }
+  &::before {
+    top: -18vw;
+    left: -12vw;
+    background: var(--color-brand-green);
+    animation: aurora-drift 26s ease-in-out infinite alternate;
+  }
+  &::after {
+    bottom: -22vw;
+    right: -14vw;
+    background: var(--color-brand-green-light);
+    opacity: 0.1;
+    animation: aurora-drift 34s ease-in-out infinite alternate-reverse;
+  }
+}
+
+@keyframes aurora-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(6vw, 5vw, 0) scale(1.15);
+  }
+}
+
+/* Fine grain so flat surfaces don't look plasticky */
+@utility grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Subtle grid so the dark navy reads as a designed surface — visible across the whole page */
+@utility grid-global {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 60%, transparent 100%);
+  animation: grid-reveal 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards, grid-breathe 8s ease-in-out infinite 1.8s;
+}
+
+@keyframes grid-reveal {
+  from {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes grid-breathe {
+  0%, 100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Local grid fade for contained hero cards */
+@utility grid-fade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(120% 90% at 50% 0%, #000 0%, transparent 72%);
+}
+
+/* Small uppercase pill label */
+@utility eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-brand-green-light);
+  border: 1px solid rgba(93, 202, 165, 0.22);
+  background: rgba(29, 158, 117, 0.07);
+  backdrop-filter: blur(12px);
+}
+
+/* Live status dot */
+@utility pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-brand-green);
+  box-shadow: 0 0 0 0 rgba(29, 158, 117, 0.6);
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(29, 158, 117, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(29, 158, 117, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(29, 158, 117, 0);
+  }
+}
+
+/* Slow shimmer across large display headings */
+@utility text-shimmer {
+  display: inline-block;
+  padding-inline: 0.04em;
+  margin-inline: -0.04em;
+  background: linear-gradient(
+    100deg,
+    #ffffff 0%,
+    #ffffff 35%,
+    var(--color-brand-green-light) 50%,
+    #ffffff 65%,
+    #ffffff 100%
+  );
+  background-size: 250% 100%;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-pan 9s linear infinite;
+}
+
+@keyframes shimmer-pan {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -150% 0;
+  }
+}
+
+/* Display typography — tighter, larger, more confident */
+@utility display {
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  /* roomy enough for Slovak diacritics (á, í, č) and descenders */
+  line-height: 1.1;
+  padding-block: 0.06em;
+}
+
+/* Thin animated hairline divider */
+@utility hairline {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(29, 158, 117, 0.55) 50%,
+    transparent 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora::before,
+  .aurora::after,
+  .text-shimmer,
+  .pulse-dot,
+  .grid-global {
+    animation: none !important;
+  }
+}
+
+/* ---------- Modern v2 ---------- */
+
+/* Sweeping highlight across primary buttons on hover */
+@utility btn-shine {
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -60%;
+    width: 45%;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.22) 50%,
+      transparent 100%
+    );
+    transform: skewX(-18deg);
+    transition: left 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+  &:hover::before {
+    left: 120%;
+  }
+}
+
+@utility btn-arrow {
+  display: inline-block;
+  transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  .btn-shine:hover & {
+    transform: translateX(4px);
+  }
+}
+
+/* Reading progress line pinned to the very top */
+@utility scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 60;
+  transform-origin: 0 50%;
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-green) 0%,
+    var(--color-brand-green-light) 100%
+  );
+}
+
+/* Hairline gradient edge for glass cards — crisper, more premium */
+@utility glass-edge {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: linear-gradient(
+      140deg,
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(255, 255, 255, 0.02) 38%,
+      rgba(29, 158, 117, 0.25) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+}
+
+/* Slow floating motion for accent elements */
+@utility float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float-slow {
+    animation: none !important;
+  }
+}
+
+/* --- ECG heartbeat line animation --- */
+.ecg-line {
+  /* isolate layout/paint work of the trace from the rest of the page */
+  contain: layout paint style;
+}
+
+.ecg-base {
+  opacity: 0.35;
+}
+
+/* Cheap glow: a wider, low-opacity copy instead of an expensive
+   per-frame drop-shadow filter (filters re-rasterize every frame). */
+.ecg-glow {
+  stroke-dasharray: 150 850;
+  stroke-width: 4;
+  opacity: 0.28;
+  animation: ecg-sweep 3.6s linear infinite;
+}
+
+.ecg-trace {
+  stroke-dasharray: 150 850;
+  animation: ecg-sweep 3.6s linear infinite;
+}
+
+.ecg-glow,
+.ecg-trace {
+  will-change: stroke-dashoffset;
+}
+
+/* Pause entirely when the divider is off-screen */
+.ecg-line[data-active="false"] .ecg-glow,
+.ecg-line[data-active="false"] .ecg-trace {
+  animation-play-state: paused;
+  will-change: auto;
+}
+
+@keyframes ecg-sweep {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+
+
+/* --- Process step number pulse --- */
+.step-pulse {
+  position: relative;
+}
+
+.step-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 1.5px solid rgba(29, 158, 117, 0.55);
+  animation: step-pulse-ring 2.8s ease-out infinite;
+  animation-delay: var(--step-delay, 0s);
+  pointer-events: none;
+}
+
+@keyframes step-pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+/* OS-level preference (before/without an explicit user choice) */
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="full"]) .ecg-glow,
+  html:not([data-motion="full"]) .ecg-trace,
+  html:not([data-motion="full"]) .step-pulse::after {
+    animation: none;
+  }
+  html:not([data-motion="full"]) .ecg-glow {
+    opacity: 0;
+  }
+  html:not([data-motion="full"]) .ecg-base {
+    opacity: 0.6;
+  }
+}
+
+/* Explicit user choice via the motion toggle */
+html[data-motion="reduced"] .ecg-glow,
+html[data-motion="reduced"] .ecg-trace,
+html[data-motion="reduced"] .step-pulse::after {
+  animation: none;
+}
+
+/* Static ECG readout: full line, no sweeping trace */
+html[data-motion="reduced"] .ecg-glow {
+  opacity: 0;
+}
+
+html[data-motion="reduced"] .ecg-trace {
+  stroke-dasharray: none;
+  opacity: 0;
+}
+
+html[data-motion="reduced"] .ecg-base {
+  opacity: 0.6;
+}
+
+
