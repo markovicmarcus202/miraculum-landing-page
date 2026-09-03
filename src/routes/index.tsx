@@ -5,6 +5,7 @@ import { Reveal } from "../components/Reveal";
 import { ProcessTimeline } from "../components/ProcessTimeline";
 import { Faq } from "../components/Faq";
 import { Services } from "../components/Services";
+import { Comparison } from "../components/Comparison";
 import { ScrollProgress } from "../components/ScrollProgress";
 import { ConsultationDialog } from "../components/ConsultationDialog";
 
@@ -41,48 +42,6 @@ const navLinks = [
   { href: "#proces", label: "Proces" },
   { href: "#recenzie", label: "Recenzie" },
   { href: "#kontakt", label: "Kontakt" },
-];
-
-const values = [
-  {
-    title: "Merateľné výsledky",
-    text: "Každé zlepšenie vyčíslime v eurách, nie v pocitoch.",
-    icon: (
-      <>
-        <path d="M3 3v18h18" />
-        <path d="M7 15l4-4 3 3 5-6" />
-      </>
-    ),
-  },
-  {
-    title: "Zameranie na healthcare",
-    text: "Rozumieme klinikám, ambulanciám a zdravotníckym firmám.",
-    icon: (
-      <>
-        <path d="M12 21s-7-4.5-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.5-9 9-9 9z" />
-      </>
-    ),
-  },
-  {
-    title: "Bez zbytočnej práce",
-    text: "Automatizujeme to, čo teraz beží cez Excel, WhatsApp a e-mail.",
-    icon: (
-      <>
-        <circle cx="12" cy="12" r="3" />
-        <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" />
-      </>
-    ),
-  },
-  {
-    title: "Video, ktoré predáva",
-    text: "Produkcia, ktorá privádza klientov, nie len zbiera lajky.",
-    icon: (
-      <>
-        <polygon points="23 7 16 12 23 17 23 7" />
-        <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
-      </>
-    ),
-  },
 ];
 
 function Landing() {
@@ -218,35 +177,7 @@ function Landing() {
           </div>
         </section>
 
-        {/* VALUES */}
-        <section className="max-w-6xl mx-auto px-6 pb-20 md:pb-24">
-          <Reveal as="h2" className="text-3xl md:text-4xl font-extrabold mb-10 max-w-2xl text-pretty">
-            V čom sme iní?
-          </Reveal>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {values.map((v, i) => (
-              <Reveal key={v.title} delay={i * 100}>
-                <div className="glass glass-edge glass-hover glass-glow p-5 h-full">
-                  <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="var(--color-brand-green)"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    {v.icon}
-                  </svg>
-                  <h3 className="mt-4 text-base font-extrabold text-white">{v.title}</h3>
-                  <p className="mt-2 text-sm text-white/70 leading-relaxed">{v.text}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </section>
+        <Comparison />
 
         <Services />
 
@@ -289,7 +220,7 @@ function Landing() {
                 Zistite za minútu, čo vo vašom marketingu opraviť ako prvé.
               </h2>
               <p className="mt-4 text-sm md:text-base text-white/70">
-                8 krátkych otázok. Ozveme sa do 24 hodín s konkrétnym návrhom.
+                9 krátkych otázok. Ozveme sa do 24 hodín s konkrétnym návrhom.
               </p>
               <button
                 type="button"

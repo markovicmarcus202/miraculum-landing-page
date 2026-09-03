@@ -6,7 +6,7 @@ const services = [
   {
     title: "Organic content",
     description:
-      "Reels, TikTok a Shorts, ktoré budujú dôveru a privádzajú pacientov bez platenej reklamy.",
+      "Vyrábame krátke videá pre Instagram, TikTok a YouTube Shorts. Získate stály prísun nových pacientov bez toho, aby ste míňali na reklamu.",
     icon: (
       <>
         <polygon points="23 7 16 12 23 17 23 7" />
@@ -17,7 +17,7 @@ const services = [
   {
     title: "Meta ads",
     description:
-      "Kampane na Facebooku a Instagrame nastavené na objednávky, nie na lajky — s jasným reportom.",
+      "Nastavíme a spravujeme reklamy na Facebooku a Instagrame zamerané priamo na objednávky. Získate predvídateľný počet nových klientov mesačne a presný prehľad, koľko vás stojí jeden pacient.",
     icon: (
       <>
         <path d="M3 3v18h18" />
@@ -28,7 +28,9 @@ const services = [
   {
     title: "Interné systémy",
     description:
-      "Automatizujeme to, čo dnes beží cez Excel, WhatsApp a e-mail — menej ručnej práce, menej chýb.",
+      "Prepojíme a zautomatizujeme objednávky, pripomienky a komunikáciu s klientmi. Získate menej ručnej práce, menej chýb a viac času na pacientov.",
+    to: "/crm-ukazka",
+    linkLabel: "Zobraziť ukážku CRM →",
     icon: (
       <>
         <circle cx="12" cy="12" r="3" />
@@ -39,9 +41,7 @@ const services = [
   {
     title: "CRM na mieru",
     description:
-      "Pacienti, objednávky, faktúry a úlohy na jednom mieste. Pozrite si živú ukážku systému.",
-    to: "/crm-ukazka",
-    linkLabel: "Zobraziť ukážku CRM →",
+      "Postavíme vám systém na správu pacientov, objednávok a faktúr presne podľa toho, ako funguje vaša prax. Získate jedno miesto, kde máte všetko pod kontrolou.",
     icon: (
       <>
         <rect x="3" y="4" width="18" height="16" rx="2" />
@@ -54,7 +54,7 @@ const services = [
   {
     title: "Weby a landing pages",
     description:
-      "Rýchle stránky, ktoré vysvetlia službu a dovedú návštevníka k objednávke — nie len vizitka.",
+      "Postavíme vám rýchlu webovú stránku, ktorá jasne vysvetlí vaše služby a dovedie návštevníka až k vyplneniu objednávky. Získate web, ktorý reálne prináša klientov, nie len vizitku.",
     icon: (
       <>
         <rect x="2" y="3" width="20" height="14" rx="2" />
@@ -66,7 +66,7 @@ const services = [
   {
     title: "Branding a rebranding",
     description:
-      "Logo, farby, tón komunikácie a vizuálny systém, ktorý vyzerá dôveryhodne v zdravotníctve.",
+      "Navrhneme vám logo, farby a vizuálny štýl, ktorý pôsobí profesionálne. Získate značku, ktorej pacienti dôverujú už na prvý pohľad.",
     icon: (
       <>
         <path d="M12 2l3 6 6 1-4.5 4.3 1 6.2-5.5-3-5.5 3 1-6.2L3 9l6-1z" />

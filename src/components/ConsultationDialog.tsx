@@ -7,65 +7,83 @@ type Question =
   | { id: string; type: "single" | "multi"; question: string; options: string[] }
   | { id: string; type: "contact"; question: string };
 
-const questions: Question[] = [
+export const questions: Question[] = [
   {
-    id: "services",
+    id: "problem",
     type: "multi",
-    question: "Ktoré služby vás zaujímajú?",
+    question: "Aký problém aktuálne riešite?",
     options: [
-      "Organic content (Reels, TikTok, Shorts)",
-      "Meta ads (Facebook + Instagram)",
-      "Interné systémy a automatizácie",
-      "CRM na mieru",
-      "Web / landing page",
-      "Branding alebo rebranding",
+      "Nemám dostatok nových klientov",
+      "Marketing nefunguje / neviem čo funguje",
+      "Strácam čas na administratíve",
+      "Nemám prehľad v číslach a výkonnosti",
+    ],
+  },
+  {
+    id: "social_realistic",
+    type: "single",
+    question: "Myslíte si, že je pre vás reálne získavať klientov cez sociálne siete?",
+    options: [
+      "Áno, verím tomu",
+      "Skôr áno, ale neviem ako na to",
+      "Neviem / nie som si istý",
+      "Nie, nemyslím si to",
     ],
   },
   {
     id: "industry",
     type: "single",
-    question: "V akom odvetví pôsobíte?",
+    question: "V akom odvetví medicíny podnikáte?",
     options: [
       "Zubná klinika",
       "Estetická medicína",
       "Ambulancia / poliklinika",
-      "Wellness a regenerácia",
       "Iné zdravotnícke odvetvie",
     ],
   },
   {
     id: "acquisition",
     type: "single",
-    question: "Ako dnes najčastejšie získavate nových klientov?",
+    question: "Ako sa k vám klienti najčastejšie dostavajú dnes?",
     options: [
       "Odporúčania a ústna reklama",
       "Sociálne siete",
       "Platená reklama",
       "Google / web",
-      "Nemáme to podchytené",
     ],
   },
   {
-    id: "internal",
+    id: "fear",
     type: "single",
-    question: "Ako teraz spravujete klientov a objednávky?",
+    question: "Aký je váš najväčší strach?",
     options: [
-      "Excel a papier",
-      "WhatsApp, e-mail a telefón",
-      "Máme systém, ale nevyhovuje nám",
-      "Máme funkčné CRM",
+      "Že investujem peniaze a nič to neprinesie",
+      "Že to nebudeme stíhať spracovať (viac dopytov ako kapacita)",
+      "Že konkurencia bude rásť rýchlejšie",
+      "Iné",
+    ],
+  },
+  {
+    id: "recurring_system",
+    type: "single",
+    question: "Máte systém, ktorý vám mesačne generuje stálych klientov?",
+    options: [
+      "Áno, funguje nám to",
+      "Čiastočne, ale nie je to stabilné",
+      "Nie, spoliehame sa na náhodu",
+      "Nie, a chceme to zmeniť",
     ],
   },
   {
     id: "budget",
     type: "single",
-    question: "Aký mesačný rozpočet na marketing plánujete?",
+    question: "Aký je váš mesačný rozpočet?",
     options: ["do 500 €", "500 – 1 500 €", "1 500 – 3 000 €", "3 000 € a viac", "Ešte neviem"],
   },
   {
     id: "goal",
     type: "single",
-    question: "Čo je pre vás teraz najdôležitejšie?",
+    question: "Čo je pre vás najdôležitejšie?",
     options: [
       "Viac objednávok a klientov",
       "Silnejšia značka a dôvera",
@@ -74,21 +92,13 @@ const questions: Question[] = [
     ],
   },
   {
-    id: "timing",
-    type: "single",
-    question: "Kedy chcete začať?",
-    options: ["Čo najskôr", "Do mesiaca", "Do troch mesiacov", "Zisťujem možnosti"],
-  },
-  {
     id: "contact",
     type: "contact",
-    question: "Kam sa vám môžeme ozvať?",
+    question: "Kontakt",
   },
 ];
 
 const contactSchema = z.object({
-  name: z.string().trim().nonempty({ message: "Zadajte vaše meno" }).max(100),
-  company: z.string().trim().nonempty({ message: "Zadajte názov firmy" }).max(150),
   email: z.string().trim().email({ message: "Zadajte platný e-mail" }).max(255),
   phone: z
     .string()
@@ -101,16 +111,46 @@ const contactSchema = z.object({
 type Answers = Record<string, string[]>;
 type Contact = z.infer<typeof contactSchema>;
 
-const emptyContact: Contact = { name: "", company: "", email: "", phone: "" };
+const emptyContact: Contact = { email: "", phone: "" };
 
-/** Stores the lead locally. Replace with the real CRM call later. */
-function submitLead(payload: unknown) {
+const SUPABASE_URL = "https://agwydwgvtvfokkmjxycl.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnd3lkd2d2dHZmb2trbWp4eWNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5NTU0NjcsImV4cCI6MjEwMTUzMTQ2N30.fexrI2DkgN0tOOJuBGypyYc0rpsXacXkit3E0TfF7qc";
+
+/** Sends the lead to Supabase (web_leads table). Falls back to localStorage if the request fails. */
+async function submitLead(payload: {
+  answers: Answers;
+  phone: string;
+  email: string;
+  source: string;
+  timestamp: string;
+}) {
   try {
-    const stored = JSON.parse(localStorage.getItem("miraculum:leads") ?? "[]");
-    stored.push(payload);
-    localStorage.setItem("miraculum:leads", JSON.stringify(stored.slice(-50)));
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/web_leads`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        apikey: SUPABASE_ANON_KEY,
+        authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        prefer: "return=minimal",
+      },
+      body: JSON.stringify({
+        answers: payload.answers,
+        phone: payload.phone,
+        email: payload.email,
+        source: payload.source,
+      }),
+    });
+    if (!res.ok) throw new Error(`Supabase insert failed: ${res.status}`);
   } catch {
-    /* never break the UI */
+    // Never break the UI for the visitor — keep a local fallback copy.
+    try {
+      const stored = JSON.parse(localStorage.getItem("miraculum:leads") ?? "[]");
+      stored.push(payload);
+      localStorage.setItem("miraculum:leads", JSON.stringify(stored.slice(-50)));
+    } catch {
+      /* never break the UI */
+    }
   }
 }
 
@@ -252,10 +292,8 @@ export function ConsultationDialog() {
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 {(
                   [
-                    ["name", "Vaše meno", "Marcus Markovič"],
-                    ["company", "Názov firmy", "Klinika s.r.o."],
-                    ["email", "Váš e-mail", "info@klinika.sk"],
                     ["phone", "Telefónne číslo", "+421 900 000 000"],
+                    ["email", "Váš e-mail", "info@klinika.sk"],
                   ] as [keyof Contact, string, string][]
                 ).map(([field, label, placeholder]) => (
                   <label key={field} className="block text-sm">
@@ -339,7 +377,7 @@ export function ConsultationDialog() {
             </div>
 
             <p className="mt-5 text-xs text-brand-gray">
-              8 krátkych otázok, zaberie to približne minútu. Nič si tým nezaväzujete.
+              9 krátkych otázok, zaberie to približne minútu. Nič si tým nezaväzujete.
             </p>
           </>
         )}

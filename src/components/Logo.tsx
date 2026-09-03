@@ -1,4 +1,4 @@
-import logoAsset from "../assets/logo-transparent.png.asset.json";
+import logoImg from "../assets/logo.webp";
 
 type LogoProps = {
   size?: number;
@@ -6,15 +6,15 @@ type LogoProps = {
   title?: string;
 };
 
-export function Logo({ size = 32, className, title = "Logo" }: LogoProps) {
+export function Logo({ size = 32, className, title = "Miraculum" }: LogoProps) {
   return (
     <img
-      src={logoAsset.url}
+      src={logoImg}
       width={size}
       height={size}
       alt={title}
       className={className}
-      style={{ objectFit: "contain" }}
+      style={{ objectFit: "cover", borderRadius: "28%" }}
     />
   );
 }
